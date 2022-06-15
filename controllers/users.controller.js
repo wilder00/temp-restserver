@@ -1,5 +1,6 @@
 //para que el editor de código autocomplete mejor
 const { request, response } = require('express');
+const { validationResult }= require('express-validator');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 
@@ -27,13 +28,26 @@ const getUsers = async (req = request, res = response)=>{
 }
 const postUser = async(req, res = response)=>{
   
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({
+      message: errors.array()[0].msg,
+    });
+  }
+
   const {name, lastName, email, password, role} = req.body;
 
   try {
     //const user = new User({ firstName, lastName })
     const user = new User({name, lastName, email, password, role})
 
-    //TODO: verify whether the email exist
+    //verifing whether the email exists
+    const existEmail = await User.findOne({ email })
+    if(existEmail){
+      res.status(400).json({
+        message: "El correo ya existe"
+      })
+    }
 
     //TODO: Encript password
     const salt = bcrypt.genSaltSync(10); // it's the number of laps to reinforce the encryption, by default it's 10
