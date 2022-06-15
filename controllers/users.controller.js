@@ -3,9 +3,7 @@ const { request, response } = require('express');
 const User = require('../models/user.model');
 
 
-
-
-const usersGet = async (req = request, res = response)=>{
+const getUsers = async (req = request, res = response)=>{
   try {
     const users = await User.findAll();
     
@@ -26,18 +24,15 @@ const usersGet = async (req = request, res = response)=>{
     })
   }
 }
-const usersPost = async(req, res = response)=>{
-  // obtaining  data from the body
-  const { firstName, lastName } = req.body;
-  const user = new User({ firstName, lastName })
+const postUser = async(req, res = response)=>{
+  
+  const {name, lastName, email, password, role} = req.body;
+
   try {
-    await user.save();
-    res.json({
-      msg: "post API - controller",
-      //name: "no name",
-      //age,
-      user
-    });
+    //const user = new User({ firstName, lastName })
+    const user = new User({name, lastName, email, password, role})
+    const savedUser = await user.save();
+    res.json(savedUser);
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -45,7 +40,7 @@ const usersPost = async(req, res = response)=>{
     })
   }
 }
-const usersPut = (req, res = response)=>{
+const putUser = (req, res = response)=>{
   // obtaining data from the url path (it's needed that the path on the route should have /:id, then express will parse)
   const { id } = req.params;
 
@@ -53,12 +48,12 @@ const usersPut = (req, res = response)=>{
     msg: "put API - controller"
   });
 }
-const usersPatch = (req, res = response)=>{
+const patchUser = (req, res = response)=>{
   res.json({
     msg: "patch API - controller"
   });
 }
-const usersDelete = (req, res = response)=>{
+const deleteUser = (req, res = response)=>{
   res.json({
     msg: "delete API - controller"
   });
@@ -66,9 +61,9 @@ const usersDelete = (req, res = response)=>{
 
 
 module.exports = {
-  usersGet,
-  usersPost,
-  usersPut,
-  usersPatch,
-  usersDelete
+  getUsers,
+  postUser,
+  putUser,
+  patchUser,
+  deleteUser
 }

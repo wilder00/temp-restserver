@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('../database/connection');
+const db = require('../../database/connection');
 
 class Server{
   constructor(){
@@ -21,7 +21,7 @@ class Server{
   }
 
   routes(){
-    this.app.use( '/api/users', require('../routes/users'));
+    this.app.use( '/api/users', require('../../routes/users.route'));
   }
 
 
