@@ -1,5 +1,6 @@
 //para que el editor de código autocomplete mejor
 const { request, response } = require('express');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 
 
@@ -31,6 +32,14 @@ const postUser = async(req, res = response)=>{
   try {
     //const user = new User({ firstName, lastName })
     const user = new User({name, lastName, email, password, role})
+
+    //TODO: verify whether the email exist
+
+    //TODO: Encript password
+    const salt = bcrypt.genSaltSync(10); // it's the number of laps to reinforce the encryption, by default it's 10
+    user.password = bcrypt.hashSync(password, salt);
+
+    //TODO: save user
     const savedUser = await user.save();
     res.json(savedUser);
   } catch (error) {
