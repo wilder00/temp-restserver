@@ -15,4 +15,13 @@ const Role = sequelize.define('Role',{
  }
 })
 
+
+// To modify the way that an instance show data (filtering what we want to show)
+// it's needed a function() instead of arrow function
+Role.prototype.toJSON = function(){
+  //console.log("To object: ", this.dataValues);
+  const { updatedAt, createdAt,  ...role} = this.dataValues;
+  return role;
+}
+
 module.exports = Role

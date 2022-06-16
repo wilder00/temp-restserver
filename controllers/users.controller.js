@@ -5,18 +5,15 @@ const User = require('../models/user.model');
 
 
 const getUsers = async (req = request, res = response)=>{
+
+  //obtaining data from query params 
+  const { limit = 5, from = 0 } = req.query
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({ limit, offset: from });
     
-    //obtaining data from query params 
-    //const query = req.query;
-    const {name, api_key, page=1, quantity=20 } = req.query
     res.json({
-      msg: "get API - controller",
-      name,
-      api_key,
-      page: parseInt(page),
-      quantity,
+      //page: parseInt(page),
+      count: users.length,  
       users
     });
   } catch (error) {
@@ -25,6 +22,8 @@ const getUsers = async (req = request, res = response)=>{
     })
   }
 }
+
+
 const postUser = async(req, res = response)=>{
   
   
