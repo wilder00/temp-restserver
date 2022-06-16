@@ -14,6 +14,7 @@ const { isValidRole, existEmail, existUserWithId } = require('../helpers/db-vali
 const router = Router();
   
 router.get('/', getUsers);
+
 //adding middleware, if we need to use only one, it's not required to put it in an array
 router.post('/',[
   check('email', 'el correo no es válido').isEmail(), //this will send the error to the controller
@@ -25,14 +26,23 @@ router.post('/',[
   check('role').custom( isValidRole ),
   validateFields,
 ], postUser);
+
+
 router.put('/:userId',[
   check('userId', 'No es un id válido').isInt().toInt(),
   check('userId').custom( existUserWithId ),
   check('role').custom( isValidRole ),
   validateFields
 ],putUser);
+
+
 router.patch('/', patchUser);
-router.delete('/', deleteUser);
+
+router.delete('/:userId',[
+  check('userId', 'No es un id válido').isInt().toInt(),
+  check('userId').custom( existUserWithId ),
+  validateFields
+], deleteUser);
 
 
 module.exports = router;

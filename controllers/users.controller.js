@@ -57,6 +57,7 @@ const postUser = async(req, res = response)=>{
     })
   }
 }
+
 const putUser = async (req, res = response)=>{
   // obtaining data from the url path (it's needed that the path on the route should have /:id, then express will parse)
   const { userId } = req.params;
@@ -93,10 +94,34 @@ const patchUser = (req, res = response)=>{
     msg: "patch API - controller"
   });
 }
-const deleteUser = (req, res = response)=>{
-  res.json({
-    msg: "delete API - controller"
-  });
+
+
+const deleteUser = async (req, res = response)=>{
+  const { userId } = req.params;
+
+  try {
+
+    //borrando físico
+    /* const delUser = await User.destroy({ where: { id: userId } })
+    
+    res.json({
+      numberRowsDeleted: delUser
+    }); */
+
+    //borrado simbólico
+    const user = await User.findByPk(userId);
+    const removed = await user.update({state: false})
+    res.json({
+      message: "Se eliminó el usuario" 
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+
+  
 }
 
 
