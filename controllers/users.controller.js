@@ -8,11 +8,18 @@ const getUsers = async (req = request, res = response)=>{
 
   //obtaining data from query params 
   const { limit = 5, from = 0 } = req.query
+  const where = {state: true}
   try {
-    const users = await User.findAll({ limit, offset: from });
-    
+
+    const resp = await Promise.all([
+      User.count({ where }),
+      User.findAll({ limit, offset: from, where }),
+    ])
+
+    const [total , users] = resp
+
     res.json({
-      //page: parseInt(page),
+      total,
       count: users.length,  
       users
     });

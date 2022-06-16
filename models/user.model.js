@@ -36,11 +36,12 @@ const User = sequelize.define('User', {
   },
   state: {
     type: DataTypes.BOOLEAN,
-    default: true,
+    defaultValue: true,
+    allowNull: false,
   },
   google: {
     type: DataTypes.BOOLEAN,
-    default: false
+    defaultValue: false,
   }
 }, {
   // Other model options go here
