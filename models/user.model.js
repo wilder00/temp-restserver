@@ -50,4 +50,13 @@ const User = sequelize.define('User', {
 // `sequelize.define` also returns the model
 console.log(User === sequelize.models.User); // true
 
+// To modify the way that an instance show data (filtering what we want to show)
+// it's needed a function() instead of arrow function
+User.prototype.toJSON = function(){
+  console.log("To object: ", this.dataValues);
+  const {id, password, updatedAt, createdAt,  ...user} = this.dataValues;
+  return user;
+}
+
+
 module.exports = User

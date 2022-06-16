@@ -1,6 +1,5 @@
 //para que el editor de código autocomplete mejor
 const { request, response } = require('express');
-const { validationResult }= require('express-validator');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 
@@ -28,12 +27,7 @@ const getUsers = async (req = request, res = response)=>{
 }
 const postUser = async(req, res = response)=>{
   
-  const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    return res.status(400).json({
-      message: errors.array()[0].msg,
-    });
-  }
+  
 
   const {name, lastName, email, password, role} = req.body;
 
@@ -59,7 +53,8 @@ const postUser = async(req, res = response)=>{
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      error: "No se pudo crear el usuario"
+      error: "No se pudo crear el usuario",
+      message: error.message,
     })
   }
 }
