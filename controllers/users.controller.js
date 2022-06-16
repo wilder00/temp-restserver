@@ -34,14 +34,7 @@ const postUser = async(req, res = response)=>{
   try {
     //const user = new User({ firstName, lastName })
     const user = new User({name, lastName, email, password, role})
-
-    //verifing whether the email exists
-    const existEmail = await User.findOne({ email })
-    if(existEmail){
-      res.status(400).json({
-        message: "El correo ya existe"
-      })
-    }
+    
 
     //TODO: Encript password
     const salt = bcrypt.genSaltSync(10); // it's the number of laps to reinforce the encryption, by default it's 10
@@ -58,14 +51,37 @@ const postUser = async(req, res = response)=>{
     })
   }
 }
-const putUser = (req, res = response)=>{
+const putUser = async (req, res = response)=>{
   // obtaining data from the url path (it's needed that the path on the route should have /:id, then express will parse)
-  const { id } = req.params;
+  const { userId } = req.params;
+  const { id, password, google, email, ...rest } = req.body;
 
-  res.json({
-    msg: "put API - controller"
-  });
+  //TODO: Validar id contra base de datos
+
+  if(password){
+    const salt = bcrypt.genSaltSync();
+    rest.password = bcrypt.hashSync(password, salt)
+  }
+
+  try {
+    //User.upsert(rest,{}) 
+    const temp = await User.update(rest,{ where: { id: userId } });
+    const usr = await User.findByPk(id);
+    res.json({
+      msg: "correct",
+      user: usr
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message
+    });
+  }
+
 }
+
+
+
+
 const patchUser = (req, res = response)=>{
   res.json({
     msg: "patch API - controller"
