@@ -9,6 +9,7 @@ const getUsers = async (req = request, res = response)=>{
   //obtaining data from query params 
   const { limit = 5, from = 0 } = req.query
   const where = {state: true}
+  const user  = req.user;
   try {
 
     const resp = await Promise.all([
@@ -21,7 +22,8 @@ const getUsers = async (req = request, res = response)=>{
     res.json({
       total,
       count: users.length,  
-      users
+      users,
+      requestor: user
     });
   } catch (error) {
     res.status(500).json({

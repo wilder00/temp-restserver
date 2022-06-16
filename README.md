@@ -20,3 +20,4 @@ git push --tags
 - cors
 - sequalize orm for database: [doc](https://sequelize.org/docs/v6/getting-started/)
 - express-validator : para hacer validaciones como correos
+- jsonwebtoken : para generar token

@@ -10,10 +10,15 @@ const {
 
 const { validateFields } = require('../middlewares/validate-fields.middleware');
 const { isValidRole, existEmail, existUserWithId } = require('../helpers/db-validators');
+const { validateJWT } = require('../middlewares/validate-jwt');
+const { isAdminRole } = require('../middlewares/validate-roles');
 
 const router = Router();
   
-router.get('/', getUsers);
+  router.get('/', [
+    validateJWT,
+    //isAdminRole,
+  ] ,getUsers);
 
 //adding middleware, if we need to use only one, it's not required to put it in an array
 router.post('/',[

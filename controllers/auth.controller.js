@@ -1,7 +1,9 @@
 const {request , response} = require('express')
 
 const bcrypt = require('bcryptjs');
+
 const User = require('../models/user.model')
+const { generateJWT } = require('../helpers/jwt-generator')
 
 const postLogin = async (req = request, res = response) => {
 
@@ -19,7 +21,7 @@ const postLogin = async (req = request, res = response) => {
     // verify if user is active
     if( !user.state ){
       res.status(400).json({
-        message: 'Usuario / Password no son correctos estado: false'
+        message: 'Usuario / Password no son correctos'
       })
     }
 
@@ -27,12 +29,17 @@ const postLogin = async (req = request, res = response) => {
     const isValidPassword = bcrypt.compareSync(password, user.password);
     if(!isValidPassword){
       res.status(400).json({
-        message: 'Usuario / Password no son correctos - password'
+        message: 'Usuario / Password no son correctos'
       })
     }
 
     // generate JWT
+    const token = await generateJWT( user.id ) 
 
+    res.json({
+      token,
+      user
+    })
     
   } catch (error) {
     res.status(500).json({
