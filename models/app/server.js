@@ -9,12 +9,12 @@ class Server{
 
     this.dbConnection();
     this.dbSynchronize();
-    this.middleware();
+    this.middlewares();
     this.routes();
   }
 
 
-  middleware(){
+  middlewares(){
     this.app.use( cors() )
     this.app.use( express.json() )
     this.app.use( express.static('public') )
@@ -22,6 +22,7 @@ class Server{
 
   routes(){
     this.app.use( '/api/users', require('../../routes/users.route'));
+    this.app.use( '/api/roles', require('../../routes/roles.route'));
   }
 
 
