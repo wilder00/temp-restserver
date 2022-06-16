@@ -1,21 +1,35 @@
 const {request , response} = require('express')
 
+const bcrypt = require('bcryptjs');
 const User = require('../models/user.model')
 
 const postLogin = async (req = request, res = response) => {
 
   const { email, password } = req.body
-
   try {
 
     //verify if the email exits
-
+    const user = await User.findOne({ where: { email }})
+    if( !user ){
+      res.status(400).json({
+        message: 'Usuario / Password no son correctos'
+      })
+    }
      
     // verify if user is active
-
+    if( !user.state ){
+      res.status(400).json({
+        message: 'Usuario / Password no son correctos estado: false'
+      })
+    }
 
     // verify the password 
-
+    const isValidPassword = bcrypt.compareSync(password, user.password);
+    if(!isValidPassword){
+      res.status(400).json({
+        message: 'Usuario / Password no son correctos - password'
+      })
+    }
 
     // generate JWT
 
