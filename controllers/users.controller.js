@@ -36,7 +36,7 @@ const postUser = async(req, res = response)=>{
     const user = new User({name, lastName, email, password, role})
     
 
-    //TODO: Encript password
+    //TODO: Encrypt password
     const salt = bcrypt.genSaltSync(10); // it's the number of laps to reinforce the encryption, by default it's 10
     user.password = bcrypt.hashSync(password, salt);
 
