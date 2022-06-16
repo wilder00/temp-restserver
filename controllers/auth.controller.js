@@ -1,7 +1,31 @@
 const {request , response} = require('express')
 
+const User = require('../models/user.model')
 
 const postLogin = async (req = request, res = response) => {
+
+  const { email, password } = req.body
+
+  try {
+
+    //verify if the email exits
+
+     
+    // verify if user is active
+
+
+    // verify the password 
+
+
+    // generate JWT
+
+    
+  } catch (error) {
+    res.status(500).json({
+      error
+    })
+  }
+
   res.json({
     ok: true,
   })
